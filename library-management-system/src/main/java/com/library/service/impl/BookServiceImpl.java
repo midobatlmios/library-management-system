@@ -1,5 +1,6 @@
 package com.library.service.impl;
 
+import org.springframework.http.HttpStatus;
 import com.library.exception.BookException;
 import com.library.mapper.BookMapper;
 import com.library.model.Book;
@@ -28,7 +29,7 @@ public class BookServiceImpl implements BookService {
     public BookDTO createBook(BookDTO bookDTO) throws BookException {
 
         if(bookRepository.existsByIsbn(bookDTO.getIsbn())){
-            throw new BookException("Book already exists" +bookDTO.getIsbn()+ "already exists");
+            throw new BookException("Book with ISBN " + bookDTO.getIsbn() + " already exists", HttpStatus.CONFLICT);
         }
         Book book= bookMapper.toEntity(bookDTO);
         book.isAvailableCopesValid();
@@ -51,21 +52,21 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDTO getBookById(Long bookId) throws BookException {
         Book book=bookRepository.findById(bookId)
-                .orElseThrow(()-> new BookException("book not found!"));
+                .orElseThrow(()-> new BookException("Book not found with id: " + bookId, HttpStatus.NOT_FOUND));
         return bookMapper.toDTO(book);
     }
 
     @Override
     public BookDTO getBookByIsbn(String isbn) throws BookException {
         Book book=bookRepository.findByIsbn(isbn)
-                .orElseThrow(()-> new BookException("book not found!"));
+                .orElseThrow(()-> new BookException("Book not found with ISBN: " + isbn, HttpStatus.NOT_FOUND));
         return bookMapper.toDTO(book);
     }
 
     @Override
     public BookDTO updateBook(Long bookId, BookDTO bookDTO) throws BookException {
         Book existingBook=bookRepository.findById(bookId).
-                orElseThrow(()->new BookException("book not found !"));
+                orElseThrow(()->new BookException("Book not found with id: " + bookId, HttpStatus.NOT_FOUND));
         bookMapper.updateEntityFromDTO(bookDTO, existingBook);
         existingBook.isAvailableCopesValid();
         Book savedBook=bookRepository.save(existingBook);
@@ -75,7 +76,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(Long bookId) throws BookException {
         Book existingBook=bookRepository.findById(bookId)
-                .orElseThrow(()-> new BookException("book not found!"));
+                .orElseThrow(()-> new BookException("Book not found with id: " + bookId, HttpStatus.NOT_FOUND));
         existingBook.setActive(false);
         bookRepository.save(existingBook);
 
@@ -84,7 +85,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void hardDeleteBook(Long bookId) throws BookException {
         Book existingBook=bookRepository.findById(bookId)
-                .orElseThrow(()-> new BookException("book not found!"));
+                .orElseThrow(()-> new BookException("Book not found with id: " + bookId, HttpStatus.NOT_FOUND));
         bookRepository.delete(existingBook);
 
     }

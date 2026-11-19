@@ -1,5 +1,6 @@
 package com.library.service.impl;
 
+import org.springframework.http.HttpStatus;
 import com.library.exception.UserException;
 import com.library.mapper.UserMapper;
 import com.library.model.User;
@@ -27,11 +28,11 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser() throws UserException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth.getName() == null) {
-            throw new UserException("User is not authenticated");
+            throw new UserException("User is not authenticated", HttpStatus.UNAUTHORIZED);
         }
         User user = userRepository.findByEmail(auth.getName());
         if (user == null) {
-            throw new UserException("User not found with email: " + auth.getName());
+            throw new UserException("User not found with email: " + auth.getName(), HttpStatus.NOT_FOUND);
         }
         return user;
     }
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserById(Long id) throws UserException {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserException("User not found with id: " + id));
+                .orElseThrow(() -> new UserException("User not found with id: " + id, HttpStatus.NOT_FOUND));
         return UserMapper.toDTO(user);
     }
 

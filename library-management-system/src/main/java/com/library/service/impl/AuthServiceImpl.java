@@ -1,5 +1,6 @@
 package com.library.service.impl;
 
+import org.springframework.http.HttpStatus;
 import com.library.configirations.JwtProvider;
 import com.library.domain.AuthProvider;
 import com.library.domain.UserRole;
@@ -50,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         // Same message for unknown email and wrong password, so nobody can probe which emails exist.
         if (user == null || user.getPassword() == null
                 || !passwordEncoder.matches(password, user.getPassword())) {
-            throw new UserException("Invalid credentials");
+            throw new UserException("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
 
         user.setLastLogin(LocalDateTime.now());
@@ -62,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse signup(UserDTO req) throws UserException {
         if (userRepository.findByEmail(req.getEmail()) != null) {
-            throw new UserException("Email is already registered");
+            throw new UserException("Email is already registered", HttpStatus.CONFLICT);
         }
 
         User createdUser = new User();

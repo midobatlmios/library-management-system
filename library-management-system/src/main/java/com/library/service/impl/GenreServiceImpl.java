@@ -1,6 +1,7 @@
 package com.library.service.impl;
 
 
+import org.springframework.http.HttpStatus;
 import com.library.exception.GenreException;
 import com.library.mapper.GenreMapper;
 import com.library.model.Genre;
@@ -46,7 +47,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public GenreDTO getGenreById(Long genreId) throws GenreException {
         Genre genre= genreRepository.findById(genreId).orElseThrow(
-                ()-> new GenreException("genre not found")
+                ()-> new GenreException("Genre not found with id: " + genreId, HttpStatus.NOT_FOUND)
         );
         return genreMapper.toDTO(genre);
     }
@@ -54,7 +55,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException {
         Genre existingGenre= genreRepository.findById(genreId).orElseThrow(
-                ()-> new GenreException("genre not found")
+                ()-> new GenreException("Genre not found with id: " + genreId, HttpStatus.NOT_FOUND)
         );
 
         genreMapper.updateEntityFromDTO(genreDTO,existingGenre);
@@ -66,7 +67,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void deleteGenre(Long genreId) throws GenreException {
         Genre existingGenre= genreRepository.findById(genreId).orElseThrow(
-                ()-> new GenreException("genre not found")
+                ()-> new GenreException("Genre not found with id: " + genreId, HttpStatus.NOT_FOUND)
         );
         existingGenre.setActive(false);
         genreRepository.save(existingGenre);
@@ -76,7 +77,7 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void hardDeleteGenre(Long genreId) throws GenreException {
         Genre existingGenre= genreRepository.findById(genreId).orElseThrow(
-                ()-> new GenreException("genre not found")
+                ()-> new GenreException("Genre not found with id: " + genreId, HttpStatus.NOT_FOUND)
         );
         genreRepository.delete(existingGenre);
 

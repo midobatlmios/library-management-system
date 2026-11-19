@@ -1,7 +1,13 @@
 package com.library.exception;
 
-public class BookException extends Exception {
+import org.springframework.http.HttpStatus;
+
+public class BookException extends LibraryException {
     public BookException(String message) {
         super(message);
+    }
+
+    public BookException(String message, HttpStatus status) {
+        super(message, status);
     }
 }

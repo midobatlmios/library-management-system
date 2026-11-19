@@ -52,7 +52,7 @@ public class SecurityConfig {
             throws java.io.IOException {
         response.setStatus(status);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write("{\"message\":\"" + message + "\",\"status\":false}");
+        response.getWriter().write("{\"message\":\"" + message + "\",\"success\":false}");
     }
 
     private CorsConfigurationSource corsConfigurationSource() {

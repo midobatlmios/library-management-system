@@ -1,7 +1,13 @@
 package com.library.exception;
 
-public class UserException extends Exception {
-    public UserException(String message){
+import org.springframework.http.HttpStatus;
+
+public class UserException extends LibraryException {
+    public UserException(String message) {
         super(message);
+    }
+
+    public UserException(String message, HttpStatus status) {
+        super(message, status);
     }
 }

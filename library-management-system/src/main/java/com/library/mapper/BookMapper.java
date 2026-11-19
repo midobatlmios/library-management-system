@@ -1,6 +1,7 @@
 package com.library.mapper;
 
 
+import org.springframework.http.HttpStatus;
 import com.library.exception.BookException;
 import com.library.model.Book;
 import com.library.model.Genre;
@@ -54,7 +55,7 @@ public class BookMapper {
         if (dto.getGenreId() != null) {
             Genre genre = genreRepository.findById(dto.getGenreId())
                     .orElseThrow(() -> new BookException(
-                            "Genre with ID " + dto.getGenreId() + " not found"));
+                            "Genre not found with id: " + dto.getGenreId(), HttpStatus.NOT_FOUND));
             book.setGenre(genre);
         }
         book.setPublisher(dto.getPublisher());
@@ -82,7 +83,7 @@ public class BookMapper {
         if (dto.getGenreId() != null) {
             Genre genre = genreRepository.findById(dto.getGenreId())
                     .orElseThrow(() -> new BookException(
-                            "Genre with ID " + dto.getGenreId() + " not found"));
+                            "Genre not found with id: " + dto.getGenreId(), HttpStatus.NOT_FOUND));
             book.setGenre(genre);
         }
         book.setPublisher(dto.getPublisher());

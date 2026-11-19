@@ -48,16 +48,19 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+    @GetMapping("/isbn/{isbn}")
+    public ResponseEntity<BookDTO> getBookByIsbn(@PathVariable String isbn)
+            throws BookException {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<BookDTO>updateBook(
             @PathVariable Long id,
-            @RequestBody BookDTO bookDTO) {
-        try{
-            BookDTO updateBook = bookService.updateBook(id, bookDTO);
-            return ResponseEntity.ok(updateBook);
-        } catch(BookException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+            @RequestBody BookDTO bookDTO) throws BookException {
+        // Errors (e.g. book not found) go to GlobalException, which returns the proper status and message.
+        BookDTO updateBook = bookService.updateBook(id, bookDTO);
+        return ResponseEntity.ok(updateBook);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteBook(
@@ -66,7 +69,7 @@ public class BookController {
         return ResponseEntity.ok(new ApiResponse("book deleted successfully",true));
     }
 
-    @DeleteMapping("{id}/permanet")
+    @DeleteMapping("/{id}/permanent")
     public ResponseEntity<ApiResponse> hardDeleteBook(
             @PathVariable Long id)throws BookException{
         bookService.hardDeleteBook(id);
