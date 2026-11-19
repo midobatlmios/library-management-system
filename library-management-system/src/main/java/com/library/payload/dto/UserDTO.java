@@ -1,5 +1,6 @@
 package com.library.payload.dto;
 
+import com.library.domain.AuthProvider;
 import com.library.domain.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
@@ -25,8 +26,17 @@ public class UserDTO {
     private String phone;
     @NotBlank(message = "Full name is required")
     private String fullName;
+    // Read-only fields: the server sets these, anything the client sends is ignored.
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UserRole role;
-    private String username;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private AuthProvider authProvider;
+    private String profileImage;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Boolean verified;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastLogin;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createdAt;
 }
