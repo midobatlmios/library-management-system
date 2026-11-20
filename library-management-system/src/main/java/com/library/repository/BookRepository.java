@@ -4,6 +4,7 @@ import com.library.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,7 +33,25 @@ public interface BookRepository extends JpaRepository<Book,Long> {
 
     long countByActiveTrue();
 
+    /** Books (active or not) that use this genre. */
+    long countByGenre_Id(Long genreId);
+
     @Query("select count(b) from Book b where b.availableCopies>0 and b.active=true")
     long countAvailableBooks();
+
+    /**
+     * Takes one copy in a single SQL statement, so two people can never both get the last copy.
+     * Returns 1 if a copy was taken, 0 if none was available.
+     */
+    @Modifying(flushAutomatically = true)
+    @Query("update Book b set b.availableCopies = b.availableCopies - 1 " +
+            "where b.id = :bookId and b.availableCopies > 0 and b.active = true")
+    int takeOneCopy(@Param("bookId") Long bookId);
+
+    /** Puts one copy back, never above totalCopies. */
+    @Modifying(flushAutomatically = true)
+    @Query("update Book b set b.availableCopies = b.availableCopies + 1 " +
+            "where b.id = :bookId and b.availableCopies < b.totalCopies")
+    int returnOneCopy(@Param("bookId") Long bookId);
 
 }

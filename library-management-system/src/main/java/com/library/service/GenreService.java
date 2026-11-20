@@ -2,35 +2,47 @@ package com.library.service;
 
 import com.library.exception.GenreException;
 import com.library.payload.dto.GenreDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.library.payload.response.PagesResponse;
 
 import java.util.List;
 
 public interface GenreService {
-    GenreDTO createGenre(GenreDTO genre);
 
-    List<GenreDTO> getAllGenres();
+    GenreDTO createGenre(GenreDTO dto) throws GenreException;
 
-    GenreDTO getGenreById(Long genreId) throws GenreException;
+    /** All or nothing. Items may point to a parent created earlier in the same list via parentGenreCode. */
+    List<GenreDTO> createGenres(List<GenreDTO> dtos) throws GenreException;
 
-    GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException;
+    /** includeInactive: admins see deactivated genres, everyone else gets 404 for them. */
+    GenreDTO getGenreById(Long id, boolean includeInactive) throws GenreException;
 
-    void deleteGenre(Long genreId) throws GenreException;
+    GenreDTO getGenreByCode(String code, boolean includeInactive) throws GenreException;
 
-    void hardDeleteGenre(Long genreId) throws GenreException;
+    /** Flat list. Admins get all genres, others only active ones. */
+    List<GenreDTO> getAllGenres(boolean includeInactive);
 
-    List<GenreDTO> getAllActiveGenresWithSubGenres();
+    List<GenreDTO> getActiveGenres();
+
+    /** Top-level active genres, each with its active sub-genres (recursive). */
+    List<GenreDTO> getActiveHierarchy();
+
+    /** Top-level active genres, without children. */
     List<GenreDTO> getTopLevelGenres();
 
-    Page<GenreDTO> searchGenres(String searchTerm, Pageable pageable);
+    List<GenreDTO> getSubGenres(Long parentId) throws GenreException;
+
+    PagesResponse<GenreDTO> searchGenres(String name, boolean includeInactive, int page, int size,
+                                         String sortBy, String sortDir) throws GenreException;
+
+    GenreDTO updateGenre(Long id, GenreDTO dto) throws GenreException;
+
+    void deleteGenre(Long id) throws GenreException;
+
+    void hardDeleteGenre(Long id) throws GenreException;
 
     long getTotalActiveGenres();
 
-    long getBookCountByGenreId(Long genreId);
+    long getBookCount(Long genreId) throws GenreException;
 
-
-    long getBookCountByGenre(Long genreId);
-
-    Long getBookCountByGenres(Long id);
+    boolean isInUse(Long genreId) throws GenreException;
 }

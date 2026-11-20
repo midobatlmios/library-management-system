@@ -1,13 +1,15 @@
 package com.library;
 
+import com.library.support.TestSupport;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class LibraryManagementSystemApplicationTests {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	@Test
-	void contextLoads() {
-	}
+/** The app starts, on the test database. */
+class LibraryManagementSystemApplicationTests extends TestSupport {
 
+    @Test
+    void contextLoads() throws Exception {
+        assertThat(adminToken()).isNotBlank();
+    }
 }

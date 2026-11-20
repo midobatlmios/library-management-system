@@ -1,103 +1,55 @@
 package com.library.mapper;
 
-
-import org.springframework.http.HttpStatus;
-import com.library.exception.BookException;
 import com.library.model.Book;
 import com.library.model.Genre;
-import com.library.repository.GenreRepository;
 import com.library.payload.dto.BookDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-
 public class BookMapper {
 
-    private final GenreRepository genreRepository;
-
-
-    public BookDTO toDTO(Book book){
-        if(book==null){
+    public BookDTO toDTO(Book book) {
+        if (book == null) {
             return null;
         }
         return BookDTO.builder()
                 .id(book.getId())
+                .isbn(book.getIsbn())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .isbn(book.getIsbn())
                 .genreId(book.getGenre().getId())
                 .genreName(book.getGenre().getName())
                 .genreCode(book.getGenre().getCode())
                 .publisher(book.getPublisher())
-                .publicationDate(book.getPublishedDate())
+                .publicationDate(book.getPublicationDate())
                 .language(book.getLanguage())
+                .pages(book.getPages())
                 .description(book.getDescription())
                 .totalCopies(book.getTotalCopies())
+                .availableCopies(book.getAvailableCopies())
                 .price(book.getPrice())
-                .coverImageURL(book.getCoverImageUrl())
+                .coverImageUrl(book.getCoverImageUrl())
                 .active(book.getActive())
                 .createdAt(book.getCreatedAt())
                 .updatedAt(book.getUpdatedAt())
                 .build();
     }
-    public Book toEntity(BookDTO dto) throws BookException {
-        if(dto==null){
-            return null;
-        }
-        Book book = new Book();
-        book.setId(dto.getId());
-        book.setIsbn(dto.getIsbn());
-        book.setTitle(dto.getTitle());
-        book.setAuthor(dto.getAuthor());
 
-        if (dto.getGenreId() != null) {
-            Genre genre = genreRepository.findById(dto.getGenreId())
-                    .orElseThrow(() -> new BookException(
-                            "Genre not found with id: " + dto.getGenreId(), HttpStatus.NOT_FOUND));
-            book.setGenre(genre);
-        }
+    /**
+     * Copies the descriptive fields. Copy counts, active flag and ISBN uniqueness are handled
+     * by the service, because they need business rules.
+     */
+    public void copyDetails(BookDTO dto, Book book, Genre genre) {
+        book.setIsbn(dto.getIsbn().trim());
+        book.setTitle(dto.getTitle().trim());
+        book.setAuthor(dto.getAuthor().trim());
+        book.setGenre(genre);
         book.setPublisher(dto.getPublisher());
-        book.setPublishedDate(dto.getPublicationDate());
+        book.setPublicationDate(dto.getPublicationDate());
         book.setLanguage(dto.getLanguage());
         book.setPages(dto.getPages());
         book.setDescription(dto.getDescription());
-        book.setTotalCopies(dto.getTotalCopies());
-        book.setAvailableCopies(dto.getAvailableCopies());
         book.setPrice(dto.getPrice());
-        book.setCoverImageUrl(dto.getCoverImageURL());
-        book.setActive(true);
-
-
-        return book;
-
+        book.setCoverImageUrl(dto.getCoverImageUrl());
     }
-    public void updateEntityFromDTO(BookDTO dto, Book book) throws BookException {
-        if(dto==null || book==null){
-            return;
-        }
-        book.setTitle(dto.getTitle());
-        book.setAuthor(dto.getAuthor());
-
-        if (dto.getGenreId() != null) {
-            Genre genre = genreRepository.findById(dto.getGenreId())
-                    .orElseThrow(() -> new BookException(
-                            "Genre not found with id: " + dto.getGenreId(), HttpStatus.NOT_FOUND));
-            book.setGenre(genre);
-        }
-        book.setPublisher(dto.getPublisher());
-        book.setPublishedDate(dto.getPublicationDate());
-        book.setLanguage(dto.getLanguage());
-        book.setPages(dto.getPages());
-        book.setDescription(dto.getDescription());
-        book.setTotalCopies(dto.getTotalCopies());
-        book.setAvailableCopies(dto.getAvailableCopies());
-        book.setPrice(dto.getPrice());
-        book.setCoverImageUrl(dto.getCoverImageURL());
-        if (dto.getActive()!=null){
-            book.setActive(dto.getActive());
-        }
-    }
-
 }

@@ -1,19 +1,23 @@
 package com.library.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A book category. Genres form a tree: Fiction -> Mystery -> Detective Fiction ...
+ */
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_genre_code", columnList = "code"),
+        @Index(name = "idx_genre_name", columnList = "name"),
+        @Index(name = "idx_genre_active", columnList = "active")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,34 +29,49 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "genre code is mandatory")
-    private String code ;
+    /** Uppercase system code, e.g. DETECTIVE_FICTION. Unique. */
+    @Column(nullable = false, unique = true, length = 50)
+    private String code;
 
-    @NotBlank(message = "genre name is mandatory")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Size(max = 500 , message = " description must not exceed 500 characters")
+    @Column(length = 500)
     private String description;
 
-    @Min(value=0, message = "display  order cannot be negatie")
-    private Integer displayOrder=0;
+    @Builder.Default
+    private Integer displayOrder = 0;
 
     @Column(nullable = false)
-    private Boolean active=true;
+    @Builder.Default
+    private Boolean active = true;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_genre_id")
     private Genre parentGenre;
 
-    @OneToMany
-    private List<Genre> subGenres=new ArrayList<Genre>();
+    /** Children, filled from parentGenre (mappedBy), so the tree is always consistent. */
+    @OneToMany(mappedBy = "parentGenre")
+    @OrderBy("displayOrder ASC, name ASC")
+    @Builder.Default
+    private List<Genre> subGenres = new ArrayList<>();
 
-    //@OneToMany(mappedBy = "genre" , cascade = CascadeType.PERSIST)
-    //private List<Book> books=new ArrayList<Book>();
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    // ---- helpers from the documentation ----
 
+    public void addSubGenre(Genre child) {
+        subGenres.add(child);
+        child.setParentGenre(this);
+    }
+
+    public void removeSubGenre(Genre child) {
+        subGenres.remove(child);
+        child.setParentGenre(null);
+    }
 }

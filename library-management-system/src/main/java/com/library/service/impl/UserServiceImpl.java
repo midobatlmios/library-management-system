@@ -8,6 +8,7 @@ import com.library.payload.dto.UserDTO;
 import com.library.repository.UserRepository;
 import com.library.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() throws UserException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || auth.getName() == null) {
+        // On public endpoints a visitor without a token is "anonymous", which is not a logged-in user.
+        if (auth == null || auth.getName() == null || auth instanceof AnonymousAuthenticationToken) {
             throw new UserException("User is not authenticated", HttpStatus.UNAUTHORIZED);
         }
         User user = userRepository.findByEmail(auth.getName());

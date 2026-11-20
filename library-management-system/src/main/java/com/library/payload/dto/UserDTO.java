@@ -5,6 +5,7 @@ import com.library.domain.UserRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,8 @@ public class UserDTO {
     @Email(message = "Email must be valid")
     private String email;
     @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Size(min = 8, max = 72, message = "Password must be 8-72 characters")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).*$", message = "Password must contain at least one letter and one digit")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String phone;

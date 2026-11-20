@@ -51,9 +51,17 @@ public class User {
 
     private LocalDateTime lastLogin;
 
+    /** Login tokens issued before this moment are rejected (set when the password changes). */
+    @JsonIgnore
+    private LocalDateTime passwordChangedAt;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public boolean isAdmin() {
+        return role == UserRole.ROLE_ADMIN;
+    }
 }

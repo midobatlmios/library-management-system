@@ -1,9 +1,11 @@
 package com.library.configirations;
 
 
+import com.library.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +24,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider,
+                                                   UserRepository userRepository) throws Exception {
         return http
                 .sessionManagement(management -> management.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS
@@ -30,11 +33,32 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Most specific rules first: Spring uses the first rule that matches.
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // Plan catalog is public (pricing page); admin-only actions are guarded with @PreAuthorize.
+                        .requestMatchers(HttpMethod.GET, "/api/subscription-plans", "/api/subscription-plans/*").permitAll()
+                        // Catalog browsing is public. Every change is admin-only (@PreAuthorize in the controllers).
+                        .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**",
+                                "/api/genres", "/api/genres/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/books/search").permitAll()
+                        // Reading reviews is public. "/api/reviews/*" also matches GET /my-reviews, which
+                        // still answers 401 to visitors because it needs the logged-in user.
+                        .requestMatchers(HttpMethod.GET, "/api/reviews/*", "/api/reviews/book/**",
+                                "/api/reviews/user/*").permitAll()
+                        // Admin-only writes, checked here BEFORE the request body is read, so a normal user
+                        // gets 403 instead of validation errors. @PreAuthorize in the controllers is a second layer.
+                        .requestMatchers(HttpMethod.POST, "/api/books/**", "/api/genres/**",
+                                "/api/subscription-plans/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/books/**", "/api/genres/**",
+                                "/api/subscription-plans/**", "/api/book-loans/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/books/**", "/api/genres/**",
+                                "/api/subscription-plans/**", "/api/fines/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/fines", "/api/fines/waive", "/api/fines/*/record-payment",
+                                "/api/book-loans/search", "/api/book-loans/checkout/user/*",
+                                "/api/reservations/search", "/api/reservations/user/*").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**", "/api/*/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(new JwtValidator(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtValidator(jwtProvider, userRepository), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(ex -> ex

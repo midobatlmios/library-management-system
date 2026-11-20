@@ -1,0 +1,6 @@
+# Private documents (never commit)
+*.docx
+
+# Local secrets (also ignored inside library-management-system/.gitignore)
+secrets.properties
+**/secrets.properties
