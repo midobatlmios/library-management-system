@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { LIBRARY } from '../library.js'
 
 // The browser tab title for each page (first match wins).
 const TITLES = [
@@ -42,11 +43,11 @@ export default function PageEffects() {
     for (const [re, title] of TITLES) {
       const m = pathname.match(re)
       if (m) {
-        document.title = `${typeof title === 'function' ? title(m) : title} · Library`
+        document.title = `${typeof title === 'function' ? title(m) : title} · ${LIBRARY.name}`
         return
       }
     }
-    document.title = 'Library'
+    document.title = LIBRARY.name
   }, [pathname])
 
   return null

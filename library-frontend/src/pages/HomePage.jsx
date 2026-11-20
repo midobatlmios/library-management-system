@@ -14,6 +14,8 @@ import { getPlans } from '../api/subscriptions.js'
 import BookCard from '../components/books/BookCard.jsx'
 import GenreSign from '../components/enamel/GenreSign.jsx'
 import SignHeading from '../components/enamel/SignHeading.jsx'
+import OpenNow from '../components/enamel/OpenNow.jsx'
+import VisitUs from '../components/enamel/VisitUs.jsx'
 import { selectUser } from '../store/authSlice.js'
 import { formatMoney } from '../utils/format.js'
 import { useAsync } from '../utils/useAsync.js'
@@ -107,6 +109,7 @@ function SearchPlaque({ stats, genres }) {
           ' '
         )}
       </p>
+      <OpenNow className="mt-2 text-[15px] text-white/90" />
 
       {shownGenres.length > 0 && (
         <nav aria-label="Genres" className="mt-8 border-t-2 border-white/25 pt-7">
@@ -329,6 +332,8 @@ export default function HomePage() {
       />
 
       <HowItWorks />
+
+      <VisitUs />
 
       <MembershipPlaque plans={plans.data} user={user} />
     </div>

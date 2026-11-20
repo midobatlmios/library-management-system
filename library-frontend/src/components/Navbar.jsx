@@ -26,6 +26,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { selectIsLoggedIn } from '../store/authSlice.js'
 import ThemeToggle from './ThemeToggle.jsx'
 import UserMenu from './UserMenu.jsx'
+import { LIBRARY } from '../library.js'
 
 const NAV = [
   { to: '/books', label: 'Catalog', Icon: MenuBookIcon },
@@ -58,12 +59,14 @@ export default function Navbar() {
           {/* The name sits on a small white enamel sign with a cobalt rim. */}
           <RouterLink
             to="/"
-            aria-label="Library home"
+            aria-label={`${LIBRARY.name} home`}
             className="plaque-white plaque-sm sign-caps inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[15px] no-underline"
             style={{ color: 'var(--enamel-cobalt)', background: '#f6f7f3', outlineWidth: 1.5, outlineOffset: -4 }}
           >
             <LocalLibraryIcon sx={{ fontSize: 19 }} />
-            Library
+            {/* Full name from 600px up; the short name on phones */}
+            <span className="hidden sm:inline">{LIBRARY.name}</span>
+            <span className="sm:hidden">{LIBRARY.shortName}</span>
           </RouterLink>
 
           <div className="hidden sm:flex gap-1 ml-4">
@@ -111,7 +114,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 px-4 py-4">
             <LocalLibraryIcon color="primary" />
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Library
+              {LIBRARY.name}
             </Typography>
           </div>
           <Divider />

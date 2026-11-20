@@ -1,0 +1,79 @@
+[
+  {
+    "planCode": "DISCOVERY",
+    "title": "Discovery",
+    "description": "Try the library for free: one book at a time.",
+    "price": 0,
+    "billingCycle": "MONTHLY",
+    "durationInDays": 30,
+    "trialDays": 0,
+    "maxBooksAllowed": 1,
+    "maxBorrowDays": 14,
+    "autoRenew": false,
+    "features": [
+      "Borrow and return at the library",
+      "Reserve books that are out",
+      "Email reminders before the due date",
+      "Renew loans online",
+      "Wishlist and reviews"
+    ]
+  },
+  {
+    "planCode": "STUDENT",
+    "title": "Student",
+    "description": "For pupils and students. A student card may be checked at the desk.",
+    "price": 30,
+    "billingCycle": "MONTHLY",
+    "durationInDays": 30,
+    "trialDays": 0,
+    "maxBooksAllowed": 3,
+    "maxBorrowDays": 21,
+    "autoRenew": false,
+    "features": [
+      "Borrow and return at the library",
+      "Reserve books that are out",
+      "Email reminders before the due date",
+      "Renew loans online",
+      "Wishlist and reviews"
+    ]
+  },
+  {
+    "planCode": "READER",
+    "title": "Reader",
+    "description": "For regular readers. The first 7 days are free.",
+    "price": 50,
+    "billingCycle": "MONTHLY",
+    "durationInDays": 30,
+    "trialDays": 7,
+    "maxBooksAllowed": 5,
+    "maxBorrowDays": 21,
+    "autoRenew": false,
+    "features": [
+      "Borrow and return at the library",
+      "Reserve books that are out",
+      "Email reminders before the due date",
+      "Renew loans online",
+      "Wishlist and reviews"
+    ]
+  },
+  {
+    "planCode": "ANNUAL",
+    "title": "Annual",
+    "description": "For heavy readers and families: a full year for the price of about ten months.",
+    "price": 450,
+    "billingCycle": "YEARLY",
+    "durationInDays": 365,
+    "trialDays": 14,
+    "maxBooksAllowed": 8,
+    "maxBorrowDays": 30,
+    "autoRenew": false,
+    "features": [
+      "Borrow and return at the library",
+      "Reserve books that are out",
+      "Email reminders before the due date",
+      "Renew loans online",
+      "Wishlist and reviews",
+      "Best value: about 2 months free"
+    ]
+  }
+]

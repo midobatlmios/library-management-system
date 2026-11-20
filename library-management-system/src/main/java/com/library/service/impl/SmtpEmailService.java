@@ -44,6 +44,10 @@ public class SmtpEmailService implements EmailService {
     @Value("${app.mail.from-name:Library}")
     private String fromName;
 
+    /** Shown in every email's footer (app.library.address). */
+    @Value("${app.library.address:}")
+    private String libraryAddress;
+
     @Value("${app.frontend-url:http://localhost:5173}")
     private String frontendUrl;
 
@@ -168,15 +172,19 @@ public class SmtpEmailService implements EmailService {
 
     // ------------------------------------------------------------------ tiny HTML helpers (all text escaped)
 
-    private static String layout(String title, String body) {
+    /** Every email: the title, the body, and a footer with the library's name and address. */
+    private String layout(String title, String body) {
+        String footer = libraryAddress == null || libraryAddress.isBlank()
+                ? esc(fromName)
+                : esc(fromName) + " &middot; " + esc(libraryAddress);
         return """
                 <div style="font-family:Arial,sans-serif;background:#f4f5f7;padding:24px">
                   <div style="max-width:520px;margin:0 auto;background:#ffffff;border-radius:10px;padding:24px;color:#1d2129">
                     <h2 style="margin-top:0">%s</h2>%s
                     <hr style="border:0;border-top:1px solid #eee;margin:24px 0 12px">
-                    <p style="color:#888;font-size:12px;margin:0">Library Management System</p>
+                    <p style="color:#888;font-size:12px;margin:0">%s</p>
                   </div>
-                </div>""".formatted(esc(title), body);
+                </div>""".formatted(esc(title), body, footer);
     }
 
     private static String p(String text) {

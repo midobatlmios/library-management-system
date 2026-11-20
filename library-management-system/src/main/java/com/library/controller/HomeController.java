@@ -9,6 +9,6 @@ public class HomeController {
 
     @GetMapping
     public ResponseEntity<String> HomeController(){
-        return ResponseEntity.ok("Welcome to Library Management System");
+        return ResponseEntity.ok("Welcome to the Library Al Azhar API");
     }
 }

@@ -6,6 +6,8 @@ import ErrorBoundary from '../components/ErrorBoundary.jsx'
 import Navbar from '../components/Navbar.jsx'
 import PageEffects from '../components/PageEffects.jsx'
 import PageSkeleton from '../components/PageSkeleton.jsx'
+import OpenNow from '../components/enamel/OpenNow.jsx'
+import { hoursSummary, LIBRARY, MAPS_URL } from '../library.js'
 import { selectUser } from '../store/authSlice.js'
 
 // Read once when the app loads (reading the clock during render is "impure" for React).
@@ -42,17 +44,32 @@ export default function MainLayout() {
           </Suspense>
         </ErrorBoundary>
       </Container>
-      <Box component="footer" sx={{ borderTop: 1, borderColor: 'divider', py: 3 }}>
-        <Container maxWidth="lg" className="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <Typography variant="body2" color="text.secondary">
-            © {YEAR} Library
-          </Typography>
-          <div className="flex gap-4">
+      <Box component="footer" sx={{ borderTop: 1, borderColor: 'divider', py: 4 }}>
+        <Container maxWidth="lg" className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="flex flex-col gap-1">
+            <span className="sign-caps text-[13px]">{LIBRARY.name}</span>
+            <Link href={MAPS_URL} target="_blank" rel="noopener noreferrer" variant="body2" color="text.secondary" underline="hover">
+              {LIBRARY.address}
+            </Link>
+            <Typography variant="body2" color="text.secondary">
+              © {YEAR} {LIBRARY.name}
+            </Typography>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="sign-caps text-[13px]">Opening hours</span>
+            {hoursSummary().map((line) => (
+              <Typography key={line} variant="body2" color="text.secondary">
+                {line}
+              </Typography>
+            ))}
+            <OpenNow className="text-[14px]" />
+          </div>
+          <div className="flex flex-col gap-1 sm:items-end">
             <Link component={RouterLink} to="/books" variant="body2" color="text.secondary" underline="hover">
               Catalog
             </Link>
             <Link component={RouterLink} to="/plans" variant="body2" color="text.secondary" underline="hover">
-              Plans
+              Membership plans
             </Link>
           </div>
         </Container>
