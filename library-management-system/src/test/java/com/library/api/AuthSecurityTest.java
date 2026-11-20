@@ -70,7 +70,12 @@ class AuthSecurityTest extends TestSupport {
     void protectedEndpointsNeedAValidToken() throws Exception {
         TestUser u = newUser();
         assertThat(status(get("/api/users/profile"), null, null)).isEqualTo(401);
-        String tampered = u.token().substring(0, u.token().length() - 2) + "xx";
+        // Change one character in the middle of the signature to a different one. (Replacing the
+        // last characters is not enough: the final base64 character has unused bits, so it can
+        // decode to the same signature and the "tampered" token would still be valid.)
+        String token = u.token();
+        int i = token.length() - 10;
+        String tampered = token.substring(0, i) + (token.charAt(i) == 'A' ? 'B' : 'A') + token.substring(i + 1);
         assertThat(status(get("/api/users/profile"), tampered, null)).isEqualTo(401);
         assertThat(status(get("/api/users/profile"), u.token(), null)).isEqualTo(200);
     }

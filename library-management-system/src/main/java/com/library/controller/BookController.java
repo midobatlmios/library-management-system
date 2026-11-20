@@ -84,14 +84,17 @@ public class BookController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDirection) throws BookException {
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @RequestParam(defaultValue = "false") Boolean includeInactive) throws BookException {
         return ResponseEntity.ok(bookService.searchBookWithFilters(
-                new BookSearchRequest(search, genreId, availableOnly, page, size, sortBy, sortDirection)));
+                new BookSearchRequest(search, genreId, availableOnly, page, size, sortBy, sortDirection,
+                        includeInactive && isAdmin())));   // only admins may see hidden books
     }
 
     @PostMapping("/search")
     public ResponseEntity<PagesResponse<BookDTO>> advancedSearch(@RequestBody BookSearchRequest searchRequest)
             throws BookException {
+        searchRequest.setIncludeInactive(Boolean.TRUE.equals(searchRequest.getIncludeInactive()) && isAdmin());
         return ResponseEntity.ok(bookService.searchBookWithFilters(searchRequest));
     }
 

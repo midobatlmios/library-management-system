@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book,Long> {
@@ -20,18 +21,29 @@ public interface BookRepository extends JpaRepository<Book,Long> {
             " lower(b.title) like lower(concat('%', :searchTerm, '%')) OR " +
             " lower(b.author) like lower(concat('%', :searchTerm, '%')) OR " +
             " lower(b.isbn) like lower(concat('%', :searchTerm, '%'))) AND " +
-            "(:genreId is null or b.genre.id = :genreId) AND " +
+            "(:allGenres = true or b.genre.id in :genreIds) AND " +
             "(:availableOnly = false or b.availableCopies > 0) AND " +
-            "b.active = true")
+            "(:includeInactive = true or b.active = true)")
 
+    /**
+     * allGenres = true ignores genreIds. Otherwise only books whose genre is in genreIds
+     * (the chosen genre plus its sub-genres). genreIds must never be empty: an empty
+     * IN list is invalid SQL, so callers pass a dummy value when allGenres is true.
+     */
     Page<Book> saerchBooksWithFilter(
             @Param("searchTerm") String searchTerm,
-            @Param("genreId") Long genreId,
+            @Param("allGenres") boolean allGenres,
+            @Param("genreIds") Collection<Long> genreIds,
             @Param("availableOnly") boolean availableOnly,
+            @Param("includeInactive") boolean includeInactive,
             Pageable pageable
     );
 
     long countByActiveTrue();
+
+    /** [genreId, number of active books] per genre that has any. */
+    @Query("select b.genre.id, count(b) from Book b where b.active = true group by b.genre.id")
+    java.util.List<Object[]> countActiveBooksByGenre();
 
     /** Books (active or not) that use this genre. */
     long countByGenre_Id(Long genreId);

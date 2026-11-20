@@ -17,4 +17,6 @@ public class BookSearchRequest {
     private Integer size = 20;
     private String sortBy = "createdAt";
     private String sortDirection = "DESC";
+    /** Admins only: also list soft-deleted books (so they can be restored). The controller forces false for others. */
+    private Boolean includeInactive = false;
 }

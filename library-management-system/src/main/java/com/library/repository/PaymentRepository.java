@@ -47,4 +47,9 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     long sumSucceeded(@Param("type") PaymentReferenceType type);
 
     long countByStatus(PaymentStatus status);
+
+    /** [completedAt, amount in minor units] of every successful payment since `from`. */
+    @Query("select p.completedAt, p.amount from Payment p " +
+            "where p.status = com.library.domain.PaymentStatus.SUCCESS and p.completedAt >= :from")
+    List<Object[]> findSucceededSince(@Param("from") LocalDateTime from);
 }

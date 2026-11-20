@@ -1,0 +1,719 @@
+[
+  {
+    "code": "FANTASY",
+    "name": "Fantasy",
+    "displayOrder": 1
+  },
+  {
+    "code": "HIGH_EPIC_FANTASY",
+    "name": "High/Epic Fantasy",
+    "displayOrder": 1,
+    "parentGenreCode": "FANTASY"
+  },
+  {
+    "code": "URBAN_FANTASY",
+    "name": "Urban Fantasy",
+    "displayOrder": 2,
+    "parentGenreCode": "FANTASY"
+  },
+  {
+    "code": "DARK_FANTASY",
+    "name": "Dark Fantasy",
+    "displayOrder": 3,
+    "parentGenreCode": "FANTASY"
+  },
+  {
+    "code": "SWORD_SORCERY",
+    "name": "Sword & Sorcery",
+    "displayOrder": 4,
+    "parentGenreCode": "FANTASY"
+  },
+  {
+    "code": "FAIRY_TALE_RETELLINGS",
+    "name": "Fairy Tale Retellings",
+    "displayOrder": 5,
+    "parentGenreCode": "FANTASY"
+  },
+  {
+    "code": "SCIENCE_FICTION",
+    "name": "Science Fiction",
+    "displayOrder": 2
+  },
+  {
+    "code": "SPACE_OPERA",
+    "name": "Space Opera",
+    "displayOrder": 1,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "CYBERPUNK",
+    "name": "Cyberpunk",
+    "displayOrder": 2,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "DYSTOPIAN",
+    "name": "Dystopian",
+    "displayOrder": 3,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "POST_APOCALYPTIC",
+    "name": "Post-Apocalyptic",
+    "displayOrder": 4,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "HARD_SCI_FI",
+    "name": "Hard Sci-Fi",
+    "displayOrder": 5,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "TIME_TRAVEL",
+    "name": "Time Travel",
+    "displayOrder": 6,
+    "parentGenreCode": "SCIENCE_FICTION"
+  },
+  {
+    "code": "MYSTERY",
+    "name": "Mystery",
+    "displayOrder": 3
+  },
+  {
+    "code": "COZY_MYSTERY",
+    "name": "Cozy Mystery",
+    "displayOrder": 1,
+    "parentGenreCode": "MYSTERY"
+  },
+  {
+    "code": "DETECTIVE_NOIR",
+    "name": "Detective/Noir",
+    "displayOrder": 2,
+    "parentGenreCode": "MYSTERY"
+  },
+  {
+    "code": "POLICE_PROCEDURAL",
+    "name": "Police Procedural",
+    "displayOrder": 3,
+    "parentGenreCode": "MYSTERY"
+  },
+  {
+    "code": "WHODUNIT",
+    "name": "Whodunit",
+    "displayOrder": 4,
+    "parentGenreCode": "MYSTERY"
+  },
+  {
+    "code": "LEGAL_THRILLER",
+    "name": "Legal Thriller",
+    "displayOrder": 5,
+    "parentGenreCode": "MYSTERY"
+  },
+  {
+    "code": "THRILLER_SUSPENSE",
+    "name": "Thriller / Suspense",
+    "displayOrder": 4
+  },
+  {
+    "code": "PSYCHOLOGICAL_THRILLER",
+    "name": "Psychological Thriller",
+    "displayOrder": 1,
+    "parentGenreCode": "THRILLER_SUSPENSE"
+  },
+  {
+    "code": "SPY_ESPIONAGE",
+    "name": "Spy/Espionage",
+    "displayOrder": 2,
+    "parentGenreCode": "THRILLER_SUSPENSE"
+  },
+  {
+    "code": "TECHNO_THRILLER",
+    "name": "Techno-Thriller",
+    "displayOrder": 3,
+    "parentGenreCode": "THRILLER_SUSPENSE"
+  },
+  {
+    "code": "CRIME_THRILLER",
+    "name": "Crime Thriller",
+    "displayOrder": 4,
+    "parentGenreCode": "THRILLER_SUSPENSE"
+  },
+  {
+    "code": "HORROR",
+    "name": "Horror",
+    "displayOrder": 5
+  },
+  {
+    "code": "GOTHIC",
+    "name": "Gothic",
+    "displayOrder": 1,
+    "parentGenreCode": "HORROR"
+  },
+  {
+    "code": "SUPERNATURAL",
+    "name": "Supernatural",
+    "displayOrder": 2,
+    "parentGenreCode": "HORROR"
+  },
+  {
+    "code": "SLASHER",
+    "name": "Slasher",
+    "displayOrder": 3,
+    "parentGenreCode": "HORROR"
+  },
+  {
+    "code": "COSMIC_HORROR",
+    "name": "Cosmic Horror",
+    "displayOrder": 4,
+    "parentGenreCode": "HORROR"
+  },
+  {
+    "code": "PSYCHOLOGICAL_HORROR",
+    "name": "Psychological Horror",
+    "displayOrder": 5,
+    "parentGenreCode": "HORROR"
+  },
+  {
+    "code": "HISTORICAL_FICTION",
+    "name": "Historical Fiction",
+    "displayOrder": 6
+  },
+  {
+    "code": "ALTERNATE_HISTORY",
+    "name": "Alternate History",
+    "displayOrder": 1,
+    "parentGenreCode": "HISTORICAL_FICTION"
+  },
+  {
+    "code": "WARTIME",
+    "name": "Wartime",
+    "displayOrder": 2,
+    "parentGenreCode": "HISTORICAL_FICTION"
+  },
+  {
+    "code": "BIOGRAPHICAL",
+    "name": "Biographical",
+    "displayOrder": 3,
+    "parentGenreCode": "HISTORICAL_FICTION"
+  },
+  {
+    "code": "LITERARY_FICTION",
+    "name": "Literary Fiction",
+    "displayOrder": 7
+  },
+  {
+    "code": "MAGICAL_REALISM",
+    "name": "Magical Realism",
+    "displayOrder": 1,
+    "parentGenreCode": "LITERARY_FICTION"
+  },
+  {
+    "code": "SATIRE",
+    "name": "Satire",
+    "displayOrder": 2,
+    "parentGenreCode": "LITERARY_FICTION"
+  },
+  {
+    "code": "COMING_OF_AGE",
+    "name": "Coming-of-Age",
+    "displayOrder": 3,
+    "parentGenreCode": "LITERARY_FICTION"
+  },
+  {
+    "code": "ADVENTURE",
+    "name": "Adventure",
+    "displayOrder": 8
+  },
+  {
+    "code": "SURVIVAL",
+    "name": "Survival",
+    "displayOrder": 1,
+    "parentGenreCode": "ADVENTURE"
+  },
+  {
+    "code": "WESTERN",
+    "name": "Western",
+    "displayOrder": 2,
+    "parentGenreCode": "ADVENTURE"
+  },
+  {
+    "code": "SWASHBUCKLER",
+    "name": "Swashbuckler",
+    "displayOrder": 3,
+    "parentGenreCode": "ADVENTURE"
+  },
+  {
+    "code": "PHILOSOPHY",
+    "name": "Philosophy",
+    "displayOrder": 9
+  },
+  {
+    "code": "ETHICS",
+    "name": "Ethics",
+    "displayOrder": 1,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "METAPHYSICS",
+    "name": "Metaphysics",
+    "displayOrder": 2,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "EPISTEMOLOGY",
+    "name": "Epistemology",
+    "displayOrder": 3,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "POLITICAL_PHILOSOPHY",
+    "name": "Political Philosophy",
+    "displayOrder": 4,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "EXISTENTIALISM",
+    "name": "Existentialism",
+    "displayOrder": 5,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "ANCIENT_PHILOSOPHY",
+    "name": "Ancient Philosophy",
+    "displayOrder": 6,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "EASTERN_PHILOSOPHY",
+    "name": "Eastern Philosophy",
+    "displayOrder": 7,
+    "parentGenreCode": "PHILOSOPHY"
+  },
+  {
+    "code": "SCIENCE",
+    "name": "Science",
+    "displayOrder": 10
+  },
+  {
+    "code": "PHYSICS_COSMOLOGY",
+    "name": "Physics & Cosmology",
+    "displayOrder": 1,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "BIOLOGY_EVOLUTION",
+    "name": "Biology & Evolution",
+    "displayOrder": 2,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "CHEMISTRY",
+    "name": "Chemistry",
+    "displayOrder": 3,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "MATHEMATICS",
+    "name": "Mathematics",
+    "displayOrder": 4,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "NEUROSCIENCE",
+    "name": "Neuroscience",
+    "displayOrder": 5,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "ENVIRONMENTAL_SCIENCE",
+    "name": "Environmental Science",
+    "displayOrder": 6,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "POPULAR_SCIENCE",
+    "name": "Popular Science",
+    "displayOrder": 7,
+    "parentGenreCode": "SCIENCE"
+  },
+  {
+    "code": "HISTORY",
+    "name": "History",
+    "displayOrder": 11
+  },
+  {
+    "code": "ANCIENT_HISTORY",
+    "name": "Ancient History",
+    "displayOrder": 1,
+    "parentGenreCode": "HISTORY"
+  },
+  {
+    "code": "MEDIEVAL_HISTORY",
+    "name": "Medieval History",
+    "displayOrder": 2,
+    "parentGenreCode": "HISTORY"
+  },
+  {
+    "code": "MODERN_HISTORY",
+    "name": "Modern History",
+    "displayOrder": 3,
+    "parentGenreCode": "HISTORY"
+  },
+  {
+    "code": "MILITARY_HISTORY",
+    "name": "Military History",
+    "displayOrder": 4,
+    "parentGenreCode": "HISTORY"
+  },
+  {
+    "code": "WORLD_HISTORY",
+    "name": "World History",
+    "displayOrder": 5,
+    "parentGenreCode": "HISTORY"
+  },
+  {
+    "code": "PSYCHOLOGY",
+    "name": "Psychology",
+    "displayOrder": 12
+  },
+  {
+    "code": "COGNITIVE_PSYCHOLOGY",
+    "name": "Cognitive Psychology",
+    "displayOrder": 1,
+    "parentGenreCode": "PSYCHOLOGY"
+  },
+  {
+    "code": "SOCIAL_PSYCHOLOGY",
+    "name": "Social Psychology",
+    "displayOrder": 2,
+    "parentGenreCode": "PSYCHOLOGY"
+  },
+  {
+    "code": "CLINICAL_PSYCHOLOGY",
+    "name": "Clinical Psychology",
+    "displayOrder": 3,
+    "parentGenreCode": "PSYCHOLOGY"
+  },
+  {
+    "code": "BEHAVIORAL_PSYCHOLOGY",
+    "name": "Behavioral Psychology",
+    "displayOrder": 4,
+    "parentGenreCode": "PSYCHOLOGY"
+  },
+  {
+    "code": "BIOGRAPHY_MEMOIR",
+    "name": "Biography & Memoir",
+    "displayOrder": 13
+  },
+  {
+    "code": "AUTOBIOGRAPHY",
+    "name": "Autobiography",
+    "displayOrder": 1,
+    "parentGenreCode": "BIOGRAPHY_MEMOIR"
+  },
+  {
+    "code": "POLITICAL_BIOGRAPHY",
+    "name": "Political Biography",
+    "displayOrder": 2,
+    "parentGenreCode": "BIOGRAPHY_MEMOIR"
+  },
+  {
+    "code": "MEMOIR",
+    "name": "Memoir",
+    "displayOrder": 3,
+    "parentGenreCode": "BIOGRAPHY_MEMOIR"
+  },
+  {
+    "code": "RELIGION_SPIRITUALITY",
+    "name": "Religion & Spirituality",
+    "displayOrder": 14
+  },
+  {
+    "code": "ISLAMIC_STUDIES",
+    "name": "Islamic Studies",
+    "displayOrder": 1,
+    "parentGenreCode": "RELIGION_SPIRITUALITY"
+  },
+  {
+    "code": "CHRISTIANITY",
+    "name": "Christianity",
+    "displayOrder": 2,
+    "parentGenreCode": "RELIGION_SPIRITUALITY"
+  },
+  {
+    "code": "BUDDHISM",
+    "name": "Buddhism",
+    "displayOrder": 3,
+    "parentGenreCode": "RELIGION_SPIRITUALITY"
+  },
+  {
+    "code": "COMPARATIVE_RELIGION",
+    "name": "Comparative Religion",
+    "displayOrder": 4,
+    "parentGenreCode": "RELIGION_SPIRITUALITY"
+  },
+  {
+    "code": "MYSTICISM",
+    "name": "Mysticism",
+    "displayOrder": 5,
+    "parentGenreCode": "RELIGION_SPIRITUALITY"
+  },
+  {
+    "code": "SELF_HELP_PERSONAL_DEVELOPMENT",
+    "name": "Self-Help & Personal Development",
+    "displayOrder": 15
+  },
+  {
+    "code": "PRODUCTIVITY",
+    "name": "Productivity",
+    "displayOrder": 1,
+    "parentGenreCode": "SELF_HELP_PERSONAL_DEVELOPMENT"
+  },
+  {
+    "code": "MINDFULNESS",
+    "name": "Mindfulness",
+    "displayOrder": 2,
+    "parentGenreCode": "SELF_HELP_PERSONAL_DEVELOPMENT"
+  },
+  {
+    "code": "HABITS_MOTIVATION",
+    "name": "Habits & Motivation",
+    "displayOrder": 3,
+    "parentGenreCode": "SELF_HELP_PERSONAL_DEVELOPMENT"
+  },
+  {
+    "code": "BUSINESS_ECONOMICS",
+    "name": "Business & Economics",
+    "displayOrder": 16
+  },
+  {
+    "code": "ENTREPRENEURSHIP",
+    "name": "Entrepreneurship",
+    "displayOrder": 1,
+    "parentGenreCode": "BUSINESS_ECONOMICS"
+  },
+  {
+    "code": "FINANCE_INVESTING",
+    "name": "Finance & Investing",
+    "displayOrder": 2,
+    "parentGenreCode": "BUSINESS_ECONOMICS"
+  },
+  {
+    "code": "ECONOMICS",
+    "name": "Economics",
+    "displayOrder": 3,
+    "parentGenreCode": "BUSINESS_ECONOMICS"
+  },
+  {
+    "code": "MANAGEMENT_LEADERSHIP",
+    "name": "Management & Leadership",
+    "displayOrder": 4,
+    "parentGenreCode": "BUSINESS_ECONOMICS"
+  },
+  {
+    "code": "POLITICS_SOCIETY",
+    "name": "Politics & Society",
+    "displayOrder": 17
+  },
+  {
+    "code": "POLITICAL_THEORY",
+    "name": "Political Theory",
+    "displayOrder": 1,
+    "parentGenreCode": "POLITICS_SOCIETY"
+  },
+  {
+    "code": "SOCIOLOGY",
+    "name": "Sociology",
+    "displayOrder": 2,
+    "parentGenreCode": "POLITICS_SOCIETY"
+  },
+  {
+    "code": "CURRENT_AFFAIRS",
+    "name": "Current Affairs",
+    "displayOrder": 3,
+    "parentGenreCode": "POLITICS_SOCIETY"
+  },
+  {
+    "code": "TECHNOLOGY",
+    "name": "Technology",
+    "displayOrder": 18
+  },
+  {
+    "code": "AI_MACHINE_LEARNING",
+    "name": "Artificial Intelligence & Machine Learning",
+    "displayOrder": 1,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "ROBOTICS_AUTOMATION",
+    "name": "Robotics & Automation",
+    "displayOrder": 2,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "INTERNET_WEB",
+    "name": "Internet & Web",
+    "displayOrder": 3,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "CYBERSECURITY_HACKING",
+    "name": "Cybersecurity & Hacking",
+    "displayOrder": 4,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "HARDWARE_ELECTRONICS",
+    "name": "Hardware & Electronics",
+    "displayOrder": 5,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "DATA_SCIENCE_BIG_DATA",
+    "name": "Data Science & Big Data",
+    "displayOrder": 6,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "BLOCKCHAIN_CRYPTO",
+    "name": "Blockchain & Crypto",
+    "displayOrder": 7,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "FUTURE_OF_TECHNOLOGY",
+    "name": "Future of Technology",
+    "displayOrder": 8,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "TECH_INDUSTRY_STARTUPS",
+    "name": "Tech Industry & Startups",
+    "displayOrder": 9,
+    "parentGenreCode": "TECHNOLOGY"
+  },
+  {
+    "code": "PROGRAMMING",
+    "name": "Programming",
+    "displayOrder": 19
+  },
+  {
+    "code": "PYTHON",
+    "name": "Python",
+    "displayOrder": 1,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "JAVASCRIPT_WEB_DEVELOPMENT",
+    "name": "JavaScript & Web Development",
+    "displayOrder": 2,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "JAVA_CSHARP",
+    "name": "Java & C#",
+    "displayOrder": 3,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "C_CPP",
+    "name": "C & C++",
+    "displayOrder": 4,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "MOBILE_DEVELOPMENT",
+    "name": "Mobile Development",
+    "displayOrder": 5,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "ALGORITHMS_DATA_STRUCTURES",
+    "name": "Algorithms & Data Structures",
+    "displayOrder": 6,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "SOFTWARE_ENGINEERING_DESIGN_PATTERNS",
+    "name": "Software Engineering & Design Patterns",
+    "displayOrder": 7,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "DATABASES_SQL",
+    "name": "Databases & SQL",
+    "displayOrder": 8,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "DEVOPS_CLOUD",
+    "name": "DevOps & Cloud",
+    "displayOrder": 9,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "GAME_DEVELOPMENT",
+    "name": "Game Development",
+    "displayOrder": 10,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "BEGINNER_GUIDES",
+    "name": "Beginner Guides",
+    "displayOrder": 11,
+    "parentGenreCode": "PROGRAMMING"
+  },
+  {
+    "code": "ARTS_CULTURE",
+    "name": "Arts & Culture",
+    "displayOrder": 20
+  },
+  {
+    "code": "ART_HISTORY",
+    "name": "Art History",
+    "displayOrder": 1,
+    "parentGenreCode": "ARTS_CULTURE"
+  },
+  {
+    "code": "MUSIC",
+    "name": "Music",
+    "displayOrder": 2,
+    "parentGenreCode": "ARTS_CULTURE"
+  },
+  {
+    "code": "FILM_THEATRE",
+    "name": "Film & Theatre",
+    "displayOrder": 3,
+    "parentGenreCode": "ARTS_CULTURE"
+  },
+  {
+    "code": "ARCHITECTURE",
+    "name": "Architecture",
+    "displayOrder": 4,
+    "parentGenreCode": "ARTS_CULTURE"
+  },
+  {
+    "code": "POETRY_DRAMA",
+    "name": "Poetry & Drama",
+    "displayOrder": 21
+  },
+  {
+    "code": "CLASSICAL_POETRY",
+    "name": "Classical Poetry",
+    "displayOrder": 1,
+    "parentGenreCode": "POETRY_DRAMA"
+  },
+  {
+    "code": "MODERN_POETRY",
+    "name": "Modern Poetry",
+    "displayOrder": 2,
+    "parentGenreCode": "POETRY_DRAMA"
+  },
+  {
+    "code": "PLAYS",
+    "name": "Plays",
+    "displayOrder": 3,
+    "parentGenreCode": "POETRY_DRAMA"
+  }
+]

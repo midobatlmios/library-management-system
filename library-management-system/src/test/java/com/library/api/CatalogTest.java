@@ -54,6 +54,24 @@ class CatalogTest extends TestSupport {
     }
 
     @Test
+    void onlyAdminsCanListHiddenBooks() throws Exception {
+        Long book = newBook(1);
+        String isbn = jdbc.queryForObject("select isbn from book where id = ?", String.class, book);
+        assertThat(status(delete("/api/books/" + book), adminToken(), null)).isEqualTo(200);
+        String url = "/api/books?includeInactive=true&search=" + isbn;
+
+        MvcResult admin = call(get(url), adminToken(), null);
+        assertThat((Integer) json(admin, "$.totalElements")).isEqualTo(1);
+        assertThat((Boolean) json(admin, "$.content[0].active")).isFalse();
+
+        // Visitors and members asking for hidden books still get only active ones.
+        assertThat((Integer) json(call(get(url), null, null), "$.totalElements")).isEqualTo(0);
+        assertThat((Integer) json(call(get(url), newUser().token(), null), "$.totalElements")).isEqualTo(0);
+        assertThat((Integer) json(call(post("/api/books/search"), newUser().token(),
+                "{\"searchTerm\":\"%s\",\"includeInactive\":true}".formatted(isbn)), "$.totalElements")).isEqualTo(0);
+    }
+
+    @Test
     void genreCannotBePlacedUnderItsOwnChild() throws Exception {
         String admin = adminToken();
         Long parent = newGenre();
@@ -65,6 +83,44 @@ class CatalogTest extends TestSupport {
         assertThat(status(put("/api/genres/" + parent), admin,
                 "{\"code\":\"%s\",\"name\":\"Parent\",\"parentGenreId\":%d}".formatted(parentCode, childId)))
                 .isEqualTo(400);
+    }
+
+    @Test
+    void genreFilterIncludesSubGenres() throws Exception {
+        String admin = adminToken();
+        Long parent = newGenre();
+        String code = jdbc.queryForObject("select code from genre where id = ?", String.class, parent);
+        Long child = id(call(post("/api/genres"), admin,
+                "{\"code\":\"%s_C\",\"name\":\"Child\",\"parentGenreId\":%d}".formatted(code, parent)), "$.id");
+        Long grandchild = id(call(post("/api/genres"), admin,
+                "{\"code\":\"%s_C_G\",\"name\":\"Grandchild\",\"parentGenreId\":%d}".formatted(code, child)), "$.id");
+        Long sibling = id(call(post("/api/genres"), admin,
+                "{\"code\":\"%s_S\",\"name\":\"Sibling\",\"parentGenreId\":%d}".formatted(code, parent)), "$.id");
+
+        Long book = newBook(1);
+        jdbc.update("update book set genre_id = ? where id = ?", grandchild, book);
+
+        // Found from every ancestor, including the top genre...
+        for (Long genre : new Long[]{parent, child, grandchild}) {
+            MvcResult r = call(get("/api/books?genreId=" + genre), null, null);
+            assertThat(r.getResponse().getStatus()).isEqualTo(200);
+            assertThat((Integer) json(r, "$.totalElements")).as("genre " + genre).isEqualTo(1);
+        }
+        // ...but not from a sibling branch.
+        MvcResult r = call(get("/api/books?genreId=" + sibling), null, null);
+        assertThat((Integer) json(r, "$.totalElements")).isEqualTo(0);
+
+        // Genre lists count books the same way: a genre includes its sub-genres' books.
+        MvcResult all = call(get("/api/genres"), null, null);
+        for (Long genre : new Long[]{parent, child, grandchild}) {
+            assertThat(((Number) ((java.util.List<?>) json(all, "$[?(@.id == " + genre + ")].bookCount")).get(0)).longValue())
+                    .as("bookCount of genre " + genre).isEqualTo(1);
+        }
+        assertThat(((Number) ((java.util.List<?>) json(all, "$[?(@.id == " + sibling + ")].bookCount")).get(0)).longValue())
+                .isEqualTo(0);
+        MvcResult tree = call(get("/api/genres/active/hierarchy"), null, null);
+        assertThat(((Number) ((java.util.List<?>) json(tree, "$[?(@.id == " + parent + ")].bookCount")).get(0)).longValue())
+                .isEqualTo(1);
     }
 
     @Test

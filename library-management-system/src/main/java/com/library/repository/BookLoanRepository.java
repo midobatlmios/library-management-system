@@ -17,6 +17,14 @@ import java.util.List;
 
 public interface BookLoanRepository extends JpaRepository<BookLoan, Long>, JpaSpecificationExecutor<BookLoan> {
 
+    /** [date, number of loans that started that day] from `from` on (admin daily statistics). */
+    @Query("select l.checkoutDate, count(l) from BookLoan l where l.checkoutDate >= :from group by l.checkoutDate")
+    List<Object[]> countCheckoutsByDay(@Param("from") LocalDate from);
+
+    /** [date, number of books returned that day] from `from` on. */
+    @Query("select l.returnDate, count(l) from BookLoan l where l.returnDate >= :from group by l.returnDate")
+    List<Object[]> countReturnsByDay(@Param("from") LocalDate from);
+
     long countByUserAndStatusIn(User user, Collection<BookLoanStatus> statuses);
 
     boolean existsByUserAndBookAndStatusIn(User user, Book book, Collection<BookLoanStatus> statuses);

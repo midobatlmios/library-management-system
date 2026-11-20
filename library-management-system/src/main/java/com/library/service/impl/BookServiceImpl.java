@@ -124,8 +124,11 @@ public class BookServiceImpl implements BookService {
         Pageable pageable = PageRequest.of(page, size, sort.and(Sort.by("id").ascending()));
         String term = r.getSearchTerm() == null || r.getSearchTerm().isBlank() ? null : r.getSearchTerm().trim();
 
+        boolean allGenres = r.getGenreId() == null;
+        Set<Long> genreIds = allGenres ? Set.of(-1L) : genreAndDescendantIds(r.getGenreId());
         Page<Book> books = bookRepository.saerchBooksWithFilter(
-                term, r.getGenreId(), Boolean.TRUE.equals(r.getAvailableOnly()), pageable);
+                term, allGenres, genreIds, Boolean.TRUE.equals(r.getAvailableOnly()),
+                Boolean.TRUE.equals(r.getIncludeInactive()), pageable);
         return new PagesResponse<>(books.getContent().stream().map(bookMapper::toDTO).toList(),
                 books.getNumber(), books.getSize(), books.getTotalElements(), books.getTotalPages(),
                 books.isLast(), books.isFirst(), books.isEmpty());
@@ -215,6 +218,27 @@ public class BookServiceImpl implements BookService {
 
     private static BookException notFound(String what) {
         return new BookException("Book not found with " + what, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * The genre itself plus all its sub-genres at any depth, so filtering by "Fiction"
+     * also finds books filed under "Fiction > Fantasy". An unknown id gives just that
+     * id (the search then finds nothing). "seen" also protects against a cycle in bad data.
+     */
+    private Set<Long> genreAndDescendantIds(Long genreId) {
+        Set<Long> seen = new HashSet<>();
+        List<Genre> toVisit = new ArrayList<>();
+        seen.add(genreId);
+        genreRepository.findById(genreId).ifPresent(toVisit::add);
+        while (!toVisit.isEmpty()) {
+            Genre g = toVisit.remove(toVisit.size() - 1);
+            for (Genre child : g.getSubGenres()) {
+                if (seen.add(child.getId())) {
+                    toVisit.add(child);
+                }
+            }
+        }
+        return seen;
     }
 
     private Genre findActiveGenre(Long genreId) throws BookException {

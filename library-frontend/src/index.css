@@ -1,0 +1,227 @@
+/*
+ * Tailwind + MUI together.
+ *
+ * 1. Layer order: later layers win. MUI's styles go into the "mui" layer
+ *    (StyledEngineProvider enableCssLayer in main.jsx), so Tailwind utilities
+ *    like "mt-4" can still override an MUI component when needed.
+ * 2. Tailwind's "preflight" (its CSS reset) is NOT imported: MUI's CssBaseline
+ *    already resets the page, and two resets would fight each other.
+ */
+@layer theme, base, mui, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* The signage face, self-hosted from node_modules (no external font request). */
+@import '@fontsource-variable/overpass/wght.css';
+
+/* MUI puts the class "dark" on <html> in dark mode; make Tailwind's dark: follow it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ENAMEL STREET PLAQUES
+ * The site is signed like a city: cobalt enamel plates with a white rim set in
+ * from a rounded edge, domed steel rivets, and genre plates in other enamel colours.
+ * Colours are tokens so light and dark mode share every component.
+ */
+:root {
+  --enamel-cobalt: #1b3c9e;
+  --enamel-cobalt-deep: #132c76;
+  --enamel-green: #1d6b49;
+  --enamel-red: #a8261f;
+  --enamel-ochre: #b67d06;
+  --enamel-black: #1b1d23;
+  --enamel-teal: #0d6672;
+  --enamel-plum: #5b2a6e;
+  --enamel-white: #f6f7f3;
+  --enamel-rim: rgba(255, 255, 255, 0.92);
+  --enamel-ink: #12151c;
+  --page-ground: #e8ebf1;
+  --steel: #9aa1ad;
+  --on-shelf: #1d7a4b;
+  --none-on-shelf: #a8261f;
+  --plate-shadow: 0 1px 0 rgba(10, 18, 40, 0.25), 0 6px 14px -6px rgba(10, 18, 40, 0.35);
+  --plate-shadow-raised: 0 2px 0 rgba(10, 18, 40, 0.25), 0 14px 26px -10px rgba(10, 18, 40, 0.5);
+
+  /* Charts. Validated (dataviz validator, all checks pass) against the card surface #f6f7f3. */
+  --series-1: #2b52c4;
+  --series-2: #b67d06;
+  --chart-surface: #f6f7f3;
+  --chart-grid: #dfe2e8;
+  --chart-text: #4a5163;
+}
+
+:root.dark {
+  /* Dark steps of the same hues, validated against the dark card surface #161c2e. */
+  --series-1: #5b7cf0;
+  --series-2: #c98500;
+  --chart-surface: #161c2e;
+  --chart-grid: #262e45;
+  --chart-text: #a7afc2;
+  --enamel-cobalt: #2448b8;
+  --enamel-cobalt-deep: #18348c;
+  --enamel-white: #1b2133;
+  --enamel-rim: rgba(255, 255, 255, 0.85);
+  --enamel-ink: #eef1f7;
+  --page-ground: #0d1120;
+  --steel: #5d6576;
+  --on-shelf: #4cc38a;
+  --none-on-shelf: #f07a6f;
+  --plate-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 6px 14px -6px rgba(0, 0, 0, 0.7);
+  --plate-shadow-raised: 0 2px 0 rgba(0, 0, 0, 0.5), 0 16px 28px -10px rgba(0, 0, 0, 0.85);
+}
+
+/* Browser surfaces carry the design too. */
+::selection {
+  background: var(--enamel-cobalt);
+  color: #fff;
+}
+:focus-visible {
+  outline: 3px solid var(--enamel-ochre);
+  outline-offset: 2px;
+}
+html {
+  scrollbar-color: var(--steel) transparent;
+  accent-color: var(--enamel-cobalt);
+}
+
+@layer components {
+  /*
+   * .plaque = one enamel sign. Set --plate to choose its colour.
+   * The white rim is an inset outline that follows the rounded corners;
+   * a faint top sheen is the glaze of the enamel.
+   */
+  .plaque {
+    --plate: var(--enamel-cobalt);
+    position: relative;
+    color: #fff;
+    background-color: var(--plate);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 45%);
+    border-radius: 14px;
+    outline: 2px solid var(--enamel-rim);
+    outline-offset: -7px;
+    box-shadow: var(--plate-shadow);
+  }
+  .plaque-sm {
+    border-radius: 9px;
+    outline-width: 1.5px;
+    outline-offset: -4px;
+  }
+
+  /* A white enamel plate (inverse sign): ink lettering on enamel white, cobalt rim. */
+  .plaque-white {
+    position: relative;
+    color: var(--enamel-ink);
+    background-color: var(--enamel-white);
+    border-radius: 14px;
+    outline: 2px solid var(--enamel-cobalt);
+    outline-offset: -7px;
+    box-shadow: var(--plate-shadow);
+  }
+
+  /* Two domed steel rivets, left and right, vertically centred. */
+  .rivets::before,
+  .rivets::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff 0 18%, #c9ced6 30%, #7d8592 75%, #555c68 100%);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+  }
+  .rivets::before {
+    left: 13px;
+  }
+  .rivets::after {
+    right: 13px;
+  }
+  /* Tall plates (book plates) carry two rivets in their top corners; the foot holds the shelf strip. */
+  .rivets-v::before,
+  .rivets-v::after {
+    content: '';
+    position: absolute;
+    top: 13px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff 0 18%, #c9ced6 30%, #7d8592 75%, #555c68 100%);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .rivets-v::before {
+    left: 13px;
+  }
+  .rivets-v::after {
+    right: 13px;
+  }
+
+  /* The white enamel inlays (count tiles, shelf strips) stay white in both modes, like real enamel. */
+  .inlay {
+    background: #f6f7f3;
+    color: #1b3c9e;
+  }
+
+  /* One rivet, placed by the component (the big plaque has four in its corners). */
+  .rivet {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff 0 18%, #c9ced6 30%, #7d8592 75%, #555c68 100%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+
+  /* Signage lettering: the plate voice. */
+  .sign-caps {
+    font-family: 'Overpass Variable', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 800;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A shelf: a row that scrolls sideways and snaps plate by plate. */
+  .shelf {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 180px);
+    gap: 18px;
+    overflow-x: auto;
+    padding: 6px 2px 18px;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 2px;
+    overscroll-behavior-x: contain;
+  }
+  .shelf > * {
+    scroll-snap-align: start;
+  }
+  .shelf::-webkit-scrollbar {
+    height: 8px;
+  }
+  .shelf::-webkit-scrollbar-thumb {
+    background: var(--steel);
+    border-radius: 8px;
+  }
+}
+
+/* Plates lift slightly when pointed at; motion stays off for people who ask for less. */
+@media (prefers-reduced-motion: no-preference) {
+  .plate-lift {
+    transition:
+      transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .plate-lift:hover,
+  .plate-lift:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: var(--plate-shadow-raised);
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-20T16:00:00Z",
+  "title": "Design System: Library",
+  "extensions": {
+    "colorMeta": {
+      "enamel-cobalt": { "role": "primary", "displayName": "Enamel Cobalt", "tonalRamp": ["#0b1a47", "#132c76", "#1b3c9e", "#2b52c4", "#4f72d6", "#7f9cff", "#b5c6ff", "#e3e9ff"] },
+      "enamel-ochre": { "role": "secondary", "displayName": "Enamel Ochre", "tonalRamp": ["#3d2a00", "#5f4200", "#8a5c00", "#b67d06", "#d69a24", "#e2a72e", "#f0cf86", "#fbefd2"] },
+      "enamel-white": { "role": "neutral", "displayName": "Enamel White" },
+      "enamel-ink": { "role": "neutral", "displayName": "Enamel Ink" },
+      "page-ground": { "role": "neutral", "displayName": "Page Ground (daylight wall)" },
+      "night-ground": { "role": "neutral", "displayName": "Night Ground (dark mode wall)" },
+      "steel": { "role": "neutral", "displayName": "Rivet Steel" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The search plaque heading only, in caps." },
+      "sign": { "displayName": "Sign", "purpose": "Lettering set on plates: headings, genres, steps, plate buttons." },
+      "body": { "displayName": "Body", "purpose": "Reading text in sentence case." }
+    },
+    "shadows": [
+      { "name": "plate", "value": "0 1px 0 rgba(10,18,40,0.25), 0 6px 14px -6px rgba(10,18,40,0.35)", "purpose": "A plate hanging on the wall." },
+      { "name": "plate-raised", "value": "0 2px 0 rgba(10,18,40,0.25), 0 14px 26px -10px rgba(10,18,40,0.5)", "purpose": "A plate lifted on hover or struck forward when selected." }
+    ],
+    "motion": [
+      { "name": "plate-lift", "value": "transform 220ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Plates lift 4px when pointed at; disabled under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "600px" },
+      { "name": "md", "value": "900px" },
+      { "name": "lg", "value": "1200px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Cobalt Plaque",
+      "kind": "card",
+      "refersTo": "plaque",
+      "description": "The site's own sign: cobalt enamel, inset white rim, rivets.",
+      "html": "<div class=\"ds-plaque\"><span class=\"ds-rivet ds-l\"></span><span class=\"ds-rivet ds-r\"></span>FIND YOUR NEXT BOOK</div>",
+      "css": ".ds-plaque{position:relative;background:#1b3c9e linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 45%);color:#fff;border-radius:14px;outline:2px solid rgba(255,255,255,.92);outline-offset:-7px;box-shadow:0 1px 0 rgba(10,18,40,.25),0 6px 14px -6px rgba(10,18,40,.35);padding:28px 48px;font-family:'Overpass Variable',system-ui,sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:28px}.ds-rivet{position:absolute;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,#c9ced6 30%,#7d8592 75%,#555c68 100%)}.ds-l{left:14px}.ds-r{right:14px}"
+    },
+    {
+      "name": "Genre Sign",
+      "kind": "chip",
+      "refersTo": "plaque-sm",
+      "description": "A genre as a street-name plaque with its book count on a white inlay.",
+      "html": "<a class=\"ds-genre\" href=\"#\"><span class=\"ds-rivet ds-l\"></span>PROGRAMMING <span class=\"ds-inlay\">6</span><span class=\"ds-rivet ds-r\"></span></a>",
+      "css": ".ds-genre{position:relative;display:inline-flex;align-items:center;gap:12px;padding:10px 28px;background:#1b3c9e;color:#fff;border-radius:9px;outline:1.5px solid rgba(255,255,255,.92);outline-offset:-4px;font-family:'Overpass Variable',system-ui,sans-serif;font-weight:800;letter-spacing:.06em;font-size:13px;text-decoration:none;box-shadow:0 1px 0 rgba(10,18,40,.25),0 6px 14px -6px rgba(10,18,40,.35);transition:transform 220ms cubic-bezier(.16,1,.3,1)}.ds-genre:hover,.ds-genre:focus-visible{transform:translateY(-4px)}.ds-inlay{background:#f6f7f3;color:#1b3c9e;border-radius:5px;padding:4px 6px;font-size:11px;line-height:1}.ds-rivet{position:absolute;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 18%,#c9ced6 30%,#7d8592 75%,#555c68 100%)}.ds-l{left:10px}.ds-r{right:10px}"
+    },
+    {
+      "name": "Book Plate",
+      "kind": "custom",
+      "description": "A book as an enamel plate in its genre colour, with the live shelf count on a white strip.",
+      "html": "<div class=\"ds-book\"><div class=\"ds-g\">PROGRAMMING</div><div class=\"ds-rule\"></div><div class=\"ds-t\">Clean Code</div><div class=\"ds-a\">Robert C. Martin</div><div class=\"ds-strip\">2 OF 3 ON THE SHELF</div></div>",
+      "css": ".ds-book{position:relative;width:170px;aspect-ratio:2/3;background:#a8261f linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,0) 45%);color:#fff;border-radius:14px;outline:2px solid rgba(255,255,255,.92);outline-offset:-7px;padding:26px 18px;box-sizing:border-box;font-family:'Overpass Variable',system-ui,sans-serif;display:flex;flex-direction:column}.ds-g{font-weight:800;letter-spacing:.06em;font-size:10px}.ds-rule{width:28%;height:2px;background:rgba(255,255,255,.7);margin:10px 0 14px}.ds-t{font-weight:900;font-size:23px;line-height:1.02}.ds-a{margin-top:auto;margin-bottom:30px;font-weight:600;font-size:12px}.ds-strip{position:absolute;left:10px;right:10px;bottom:10px;background:#f6f7f3;color:#16673e;border-radius:6px;padding:4px;text-align:center;font-weight:800;font-size:10px;letter-spacing:.05em}"
+    },
+    {
+      "name": "Search Button",
+      "kind": "button",
+      "refersTo": "button-search",
+      "description": "The ochre plate button set into the search plaque.",
+      "html": "<button class=\"ds-search\">SEARCH</button>",
+      "css": ".ds-search{background:#b67d06;color:#12151c;border:0;border-radius:10px;padding:16px 32px;outline:1.5px solid rgba(255,255,255,.85);outline-offset:-5px;font-family:'Overpass Variable',system-ui,sans-serif;font-weight:800;letter-spacing:.06em;font-size:16px;cursor:pointer;transition:transform 220ms cubic-bezier(.16,1,.3,1)}.ds-search:hover{transform:translateY(-4px)}.ds-search:focus-visible{outline:3px solid #b67d06;outline-offset:2px}"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "White enamel field set into the cobalt plaque.",
+      "html": "<input class=\"ds-field\" placeholder=\"Title, author or ISBN\">",
+      "css": ".ds-field{background:#f6f7f3;color:#12151c;border:0;border-radius:10px;padding:16px 16px 16px 20px;font-family:'Overpass Variable',system-ui,sans-serif;font-weight:600;font-size:18px;box-shadow:inset 0 2px 4px rgba(10,18,40,.25)}.ds-field:focus-visible{outline:3px solid #b67d06;outline-offset:2px}"
+    },
+    {
+      "name": "White Plate",
+      "kind": "card",
+      "refersTo": "plaque-white",
+      "description": "Inverse sign: ink on enamel white with a cobalt rim, for details and steps.",
+      "html": "<div class=\"ds-white\">ISBN 978-0-13-468599-1</div>",
+      "css": ".ds-white{background:#f6f7f3;color:#12151c;border-radius:14px;outline:2px solid #1b3c9e;outline-offset:-7px;padding:22px 28px;font-family:'Overpass Variable',system-ui,sans-serif;font-weight:600;box-shadow:0 1px 0 rgba(10,18,40,.25),0 6px 14px -6px rgba(10,18,40,.35)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Enamel Street Plaques",
+    "overview": "Finding a book is wayfinding. The library's website is signed like a Moroccan city in cobalt-and-white enamel plates with rims and rivets. Books without covers become enamel plates in their genre's colour that state the live shelf count.",
+    "keyCharacteristics": [
+      "Cobalt enamel plates with an inset white rim and steel rivets",
+      "One signage face (Overpass), caps on plates, sentence case for reading",
+      "Book plates in genre enamels with a white shelf-count strip",
+      "White inlays stay white in dark mode"
+    ],
+    "rules": [
+      { "name": "The Cobalt Belongs To The City Rule", "body": "Cobalt marks the site's own wayfinding; genres use the other enamels.", "section": "colors" },
+      { "name": "The Inlay Stays White Rule", "body": "Count tiles and shelf strips are white enamel in both modes with fixed inks.", "section": "colors" }
+    ],
+    "dos": [
+      "Do set new containers as plates with the inset rim.",
+      "Do state availability plainly on a white inlay.",
+      "Do use real icons for arrows and symbols."
+    ],
+    "donts": [
+      "Don't use cobalt for a genre plate.",
+      "Don't put a label above a heading.",
+      "Don't invent the library's name, logo, address or opening hours."
+    ]
+  }
+}

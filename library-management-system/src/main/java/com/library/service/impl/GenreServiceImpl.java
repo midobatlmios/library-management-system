@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -91,27 +93,80 @@ public class GenreServiceImpl implements GenreService {
     @Override
     @Transactional(readOnly = true)
     public List<GenreDTO> getAllGenres(boolean includeInactive) {
-        return genreMapper.toDTOList(includeInactive
+        return withBookCounts(genreMapper.toDTOList(includeInactive
                 ? genreRepository.findAllByOrderByDisplayOrderAscNameAsc()
-                : genreRepository.findByActiveTrueOrderByDisplayOrderAscNameAsc());
+                : genreRepository.findByActiveTrueOrderByDisplayOrderAscNameAsc()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<GenreDTO> getActiveGenres() {
-        return genreMapper.toDTOList(genreRepository.findByActiveTrueOrderByDisplayOrderAscNameAsc());
+        return withBookCounts(genreMapper.toDTOList(genreRepository.findByActiveTrueOrderByDisplayOrderAscNameAsc()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<GenreDTO> getActiveHierarchy() {
-        return genreMapper.toTreeList(genreRepository.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAscNameAsc());
+        return withBookCounts(genreMapper.toTreeList(
+                genreRepository.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAscNameAsc()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<GenreDTO> getTopLevelGenres() {
-        return genreMapper.toDTOList(genreRepository.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAscNameAsc());
+        return withBookCounts(genreMapper.toDTOList(
+                genreRepository.findByParentGenreIsNullAndActiveTrueOrderByDisplayOrderAscNameAsc()));
+    }
+
+    // ------------------------------------------------------------------ book counts
+
+    /**
+     * Fills bookCount on every DTO (and its subGenres): the number of active books in the genre
+     * AND all its sub-genres, the same rule the catalog's genre filter uses. One grouped query
+     * plus one genre list, whatever the number of genres.
+     */
+    private List<GenreDTO> withBookCounts(List<GenreDTO> dtos) {
+        Map<Long, Long> own = new HashMap<>();
+        for (Object[] row : bookRepository.countActiveBooksByGenre()) {
+            own.put((Long) row[0], (Long) row[1]);
+        }
+        Map<Long, List<Long>> children = new HashMap<>();
+        for (Genre g : genreRepository.findAll()) {
+            if (g.getParentGenre() != null) {
+                children.computeIfAbsent(g.getParentGenre().getId(), k -> new ArrayList<>()).add(g.getId());
+            }
+        }
+        Map<Long, Long> totals = new HashMap<>();
+        fill(dtos, own, children, totals);
+        return dtos;
+    }
+
+    private void fill(List<GenreDTO> dtos, Map<Long, Long> own, Map<Long, List<Long>> children,
+                      Map<Long, Long> totals) {
+        if (dtos == null) {
+            return;
+        }
+        for (GenreDTO dto : dtos) {
+            dto.setBookCount(total(dto.getId(), own, children, totals, new HashSet<>()));
+            fill(dto.getSubGenres(), own, children, totals);
+        }
+    }
+
+    private long total(Long id, Map<Long, Long> own, Map<Long, List<Long>> children,
+                       Map<Long, Long> totals, Set<Long> path) {
+        Long known = totals.get(id);
+        if (known != null) {
+            return known;
+        }
+        if (!path.add(id)) {
+            return 0;   // a cycle in bad data: count nothing twice
+        }
+        long sum = own.getOrDefault(id, 0L);
+        for (Long child : children.getOrDefault(id, List.of())) {
+            sum += total(child, own, children, totals, path);
+        }
+        totals.put(id, sum);
+        return sum;
     }
 
     @Override

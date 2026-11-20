@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -86,6 +88,7 @@ public class CheckoutPageController {
                   </div>
                   <button type="submit">Pay %s %s</button>
                 </form>
+                <p class="muted"><a href="%s">Don't pay now, go back to the library</a></p>
                 <h2>Test cards</h2>
                 <table>%s</table>
                 <p class="muted">Use any future expiry date and any 3-digit CVC.</p>
@@ -96,6 +99,7 @@ public class CheckoutPageController {
                 error == null ? "" : "<div class=\"error\">" + esc(error) + "</div>",
                 esc(p.getPaymentId()),
                 esc(p.getAmountInMajorUnits().toPlainString()), esc(p.getCurrency()),
+                esc(resultUrl(p)),
                 cards));
     }
 
@@ -110,9 +114,15 @@ public class CheckoutPageController {
                 <h1 class="%s">%s</h1>
                 <p>%s</p>
                 <p class="muted">%s</p>
-                <p><a href="%s">Back to the library</a></p>
+                <p><a class="button" href="%s">Back to the library</a></p>
                 """.formatted(ok ? "ok" : "bad", esc(title), esc(p.getDescription()), esc(details),
-                esc(frontendUrl)));
+                esc(resultUrl(p))));
+    }
+
+    /** The frontend's result page, which reads the payment's final status from the API. */
+    private String resultUrl(Payment p) {
+        return frontendUrl + "/payment/result?paymentId="
+                + URLEncoder.encode(p.getPaymentId(), StandardCharsets.UTF_8);
     }
 
     private String message(String title, String text) {
@@ -136,6 +146,7 @@ public class CheckoutPageController {
                   input{display:block;width:100%%;box-sizing:border-box;padding:10px;margin-top:4px;border:1px solid #c4c7cc;border-radius:8px;font-size:1rem}
                   button{margin-top:18px;width:100%%;padding:12px;border:0;border-radius:8px;background:#1a5fd0;color:#fff;font-size:1rem;cursor:pointer}
                   table{width:100%%;font-size:.85rem;border-collapse:collapse} td{padding:4px 0;border-bottom:1px solid #eee}
+                  a.button{display:block;text-align:center;margin-top:18px;padding:12px;border-radius:8px;background:#1a5fd0;color:#fff;text-decoration:none}
                 </style></head>
                 <body><main>%s</main></body></html>
                 """.formatted(esc(title), body);
@@ -146,7 +157,11 @@ public class CheckoutPageController {
                 .contentType(MediaType.TEXT_HTML)
                 .cacheControl(CacheControl.noStore())
                 .header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'")
-                .header("Referrer-Policy", "no-referrer")
+                // Not "no-referrer": with it, browsers send "Origin: null" when the card form is
+                // submitted, and Spring's CORS check rejects that ("Invalid CORS request").
+                // "same-origin" keeps the real origin on our own form and still sends
+                // nothing to other sites.
+                .header("Referrer-Policy", "same-origin")
                 .body(body);
     }
 

@@ -2,6 +2,7 @@ package com.library.api;
 
 import com.library.support.TestSupport;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.concurrent.Callable;
@@ -155,6 +156,38 @@ class PaymentTest extends TestSupport {
 
         String page = mvc.perform(get("/pay/" + paymentId)).andReturn().getResponse().getContentAsString();
         assertThat(page).doesNotContain("<script>alert(1)</script>").contains("&lt;script&gt;");
+    }
+
+    @Test
+    void checkoutPageLinksBackToTheFrontendResultPage() throws Exception {
+        String paymentId = json(subscribe(newUser(), newPlan(3, 14, "50")), "$.paymentId");
+        String link = "/payment/result?paymentId=" + paymentId;
+
+        // Before paying: the form offers a way back.
+        String form = mvc.perform(get("/pay/" + paymentId)).andReturn().getResponse().getContentAsString();
+        assertThat(form).contains(link);
+
+        // After paying: the result page links to the frontend's result page.
+        assertThat(payWithCard(paymentId, "4242424242424242")).isEqualTo(200);
+        String result = mvc.perform(get("/pay/" + paymentId)).andReturn().getResponse().getContentAsString();
+        assertThat(result).contains("Payment successful").contains(link);
+    }
+
+    @Test
+    void checkoutFormWorksWhenSubmittedFromABrowser() throws Exception {
+        String paymentId = json(subscribe(newUser(), newPlan(3, 14, "50")), "$.paymentId");
+
+        // "no-referrer" made browsers send "Origin: null" on the form post, which CORS refused.
+        MvcResult page = mvc.perform(get("/pay/" + paymentId)).andReturn();
+        assertThat(page.getResponse().getHeader("Referrer-Policy")).isEqualTo("same-origin");
+
+        // A browser submitting the form sends the page's own origin: it must be accepted.
+        int status = mvc.perform(post("/pay/" + paymentId)
+                        .header("Origin", "http://localhost")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("cardNumber", "4242424242424242").param("expiry", "12/35").param("cvc", "123"))
+                .andReturn().getResponse().getStatus();
+        assertThat(status).isEqualTo(200);
     }
 
     @Test
